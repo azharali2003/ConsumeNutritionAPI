@@ -1,0 +1,349 @@
+﻿@model consumeAPI_SUN.Models.FoodInfo
+
+
+@{
+    ViewBag.Title = "GetFoodInfor";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Information</title>
+    <style>
+        body {
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 950px;
+            height: 640px;            
+            background-image: url("/image/Capture.PNG");
+            border-radius: 20px;
+        }
+      
+        .outerMain {
+            margin-top: 40px;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            background-image: url("/image/Capture.PNG");
+            border-radius: 20px;
+        }
+    
+        #TextArea1 {
+            margin-top: 4.5rem;
+            width: 340px;
+            height: 150px;
+            border-radius: 15px;
+        }
+
+        .btn {
+            margin-top: 10px;
+        }
+
+        p {
+            margin: 15px;
+            color: #808080;
+        }
+
+        #display {
+            margin-top: 3.5rem;
+            width: 400px;
+            height: 60px;
+            border: 1px outset #000;
+            border-radius: 0.5rem;
+            padding: 10px;
+            color: #211f1f66;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #display2 {
+            margin-top: 4.5rem;
+            width: 820px;
+            border-radius: 1.1rem;
+            height: 280px;
+            border: 1px outset #000;
+            padding: 10px;
+            color: #211f1f66;
+            background-color: #fff;
+            padding-top: 8px;
+            padding-left: 18px;
+        }
+
+        .item {
+            padding-right: 20px;
+        }
+
+        .img1 {
+            width: 130px;
+        }
+
+        #Top {
+            font-size: 1.8rem;
+            color: black;
+        }
+
+        #cal {
+            display: flex;
+            gap: 12px;
+        }
+
+        .cal1 {
+            color: black;
+            font-size: 1.2rem;
+        }
+
+
+        .stdiv {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: start;
+            gap: 1.3rem;
+        }
+
+        .nddiv {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 1.3rem;
+        }
+
+        .recommendation {
+            margin-top: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .input {
+            margin-top: 1rem;
+        }
+
+        .btn3 {
+            background-color: #4dc822;
+            padding: 5px 17px;
+            border-radius: 70px;
+            color: white;
+            font-size: 17px;
+        }
+
+        .txt {
+            width: 220px;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #50ec248f;
+            border-radius: 21px;
+            margin-top: 1rem;
+            margin-right: 18px;
+            padding: 27px 0;
+        }
+
+        .qty {
+            width: 60px;
+        }
+
+        .unit {
+            width: 120px;
+        }
+
+        .insideMain1 {
+            margin-top: 3rem;
+            border-radius: 1.2rem;
+            width: 250px;
+        }
+
+        .mainAllImg {
+            display: flex;
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Food Information</h1>
+
+    @using (Html.BeginForm("GetFoodInfo", "Food", FormMethod.Post))
+    {
+        <div class="outerMain">
+            <main class="main">
+                <p class="text-center">
+                    Enter an ingredient list list for what you are cooking, like "1 cup rice, 10 oz chickpeas", etc.<br />
+                    Enter each ingredient on a new line.
+
+                </p>
+
+                <div class="input">
+                    <input class="qty" type="number" name="num" placeholder="Qty" required />
+                    <input class="unit" type="text" name="unit" placeholder="Enter Unit" required />
+                    <input class="txt" type="text" name="name" placeholder="Enter Food name" required />
+                    <button type="submit" class="btn3">Analyze</button>
+                </div>
+                @if (Model != null)
+                {
+
+                    <div id="display">
+                        <table>
+                            <tr>
+                                <td class="item">Qty</td>
+                                <td class="item">Unit</td>
+                                <td class="item">Food</td>
+                                <td class="item">Catories</td>
+                                <td class="item">Weight</td>
+                            </tr>
+                            <tr>
+                                @foreach (var ingredientSection in Model.Ingredients)
+                                {
+
+                                    foreach (var parsedIngredient in ingredientSection.Parsed)
+                                    {
+                                        <td>
+                                            @parsedIngredient.Quantity
+                                        </td>
+                                        <td>    @parsedIngredient.Measure</td>
+                                        <td>   @parsedIngredient.FoodMatch</td>
+
+                                    }
+
+                                }
+                                <td>@Model.calories</td>
+                                <td>@Model.totalWeight</td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+
+                }
+
+
+                @if (ViewBag.Error != null)
+                {
+                    <div style="color:red">@ViewBag.Error</div>
+                }
+
+
+                <div class="mainAllImg">
+
+                    <div><img src="~/image/top2.jpg" class="insideMain1" /> </div>
+                    <div><img src="~/image/top3.jpg" class="insideMain1" /> </div>
+                    <div><img src="~/image/top3.jpg" class="insideMain1" /> </div>
+                </div>
+
+
+            </main>
+            @if (Model != null)
+            {
+
+                <div class="rightMain">
+                    <section>
+                        <div>
+                            <h1 class="text-center">Nutrition Facts</h1>
+                            <p></p>
+                        </div>	<table>
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Amount Per Serving</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="2"><b>Calories</b></th>
+                                    <td>@Model.calories</td>
+                                </tr>
+
+                                <tr>
+                                    <th colspan="2"><b>Total Fat</b></th>
+                                    <td><b>@Model.TotalNutrients["FAT"].Quantity</b> <b>@Model.TotalNutrients["FAT"].Unit</b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <th>Saturated Fat</th>
+
+                                    <td><b>@Model.TotalNutrients["FASAT"].Quantity</b> <b>@Model.TotalNutrients["FASAT"].Unit</b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <th>Trans Fat -</th>
+
+                                    <td><b>@Model.TotalNutrients["FASAT"].Quantity</b> <b>@Model.TotalNutrients["FASAT"].Unit</b></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2"><b>Cholesterol</b> 0 mg</th>
+                                    <td><b>0 %</b></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2"><b>Sodium</b></th>
+                                    <td><b>@Model.TotalNutrients["NA"].Quantity</b> <b>@Model.TotalNutrients["NA"].Unit</b></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2"><b>Total Carbohydrate</b></th>
+                                    <td><b>103 %</b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <th>Dietary Fiber -</th>
+                                    <td><b>-</b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <th>Total Sugars -</th>
+                                    <td></td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <th>Includes - Added Sugars</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2"><b>Protein</b></th>
+                                    <td><b>@Model.TotalNutrients["PROCNT"].Quantity</b> <b>@Model.TotalNutrients["PROCNT"].Unit</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Vitamin D </th>
+                                    <td><b>@Model.TotalNutrients["VITD"].Quantity</b> <b>@Model.TotalNutrients["VITD"].Unit</b></td>
+                                </tr>
+                                <tr>
+                                    <th>Calcium</th>
+                                    <td><b>@Model.TotalNutrients["CA"].Quantity</b> <b>@Model.TotalNutrients["CA"].Unit</b></td>
+                                </tr>
+                                <tr>
+                                    <th>Iron</th>
+                                    <td><b>@Model.TotalNutrients["FE"].Quantity</b> <b>@Model.TotalNutrients["FE"].Unit</b></td>
+                                </tr>
+                                <tr class="thin-end">
+                                    <th>Potassium</th>
+                                    <td><b>@Model.TotalNutrients["K"].Quantity</b> <b>@Model.TotalNutrients["K"].Unit</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="small-info" id="small-nutrition-info">*Percent Daily Values are based on a 2000 calorie diet</p>
+                    </section>
+                </div>
+            }
+        </div>
+    }
+
+
+</body>
+</html>
+
